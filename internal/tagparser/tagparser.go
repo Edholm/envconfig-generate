@@ -47,11 +47,13 @@ func Analyze(ctx context.Context, files []*ast.File) []AvailableConfig {
 				}
 
 				options := extractConfigOptions(ctx, strukt)
-				availConfigs = append(availConfigs, AvailableConfig{
-					Name:    typespec.Name.Name,
-					Package: file.Name.Name,
-					Options: options,
-				})
+				if len(options) > 0 {
+					availConfigs = append(availConfigs, AvailableConfig{
+						Name:    typespec.Name.Name,
+						Package: file.Name.Name,
+						Options: options,
+					})
+				}
 			}
 
 			return true

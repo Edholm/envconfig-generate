@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"edholm.dev/envconfig-generate/internal/output"
 	"edholm.dev/envconfig-generate/internal/setup"
 	"edholm.dev/envconfig-generate/internal/tagparser"
 	"edholm.dev/go-logging"
@@ -29,19 +31,14 @@ func main() {
 }
 
 func realMain(ctx context.Context, providedFiles []string) error {
-	logger := logging.FromContext(ctx)
-
 	asts := setup.ParseAst(ctx, providedFiles)
 	availableConfigs := tagparser.Analyze(ctx, asts)
 
-	for _, config := range availableConfigs {
-		logger.Infof("%s/%s", config.Package, config.Name)
-		for _, opt := range config.Options {
-			logger.Infof("%s", opt.String())
-		}
+	md, err := output.ToMarkdown(ctx, availableConfigs)
+	if err != nil {
+		return err
 	}
 
-	logger.Infow("parsed files", "fileCount", len(asts))
-
+	fmt.Printf("%s", md)
 	return nil
 }
