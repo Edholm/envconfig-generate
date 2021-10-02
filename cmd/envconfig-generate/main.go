@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"edholm.dev/envconfig-generate/internal/list"
 	"edholm.dev/envconfig-generate/internal/output"
 	"edholm.dev/envconfig-generate/internal/setup"
 	"edholm.dev/envconfig-generate/internal/tagparser"
@@ -23,6 +24,14 @@ func main() {
 	if len(providedFiles) == 0 {
 		logger.Info("you need to supply files to parse")
 		os.Exit(1)
+	}
+
+	if providedFiles[0] == "./..." {
+		var err error
+		providedFiles, err = list.AllGoFiles()
+		if err != nil {
+			logger.Fatalw("failed to list all Go files", "err", err)
+		}
 	}
 
 	if err := realMain(ctx, providedFiles); err != nil {
