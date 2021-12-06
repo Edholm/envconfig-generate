@@ -17,7 +17,7 @@ func ParseAst(ctx context.Context, filenames []string) []*ast.File {
 	for _, file := range filenames {
 		parsedFile, err := parser.ParseFile(set, file, nil, 0)
 		if err != nil {
-			logger.Warnw("failed to parse file", "file", file, "err", err)
+			logger.Info("failed to parse file", "file", file, "err", err)
 			continue
 		}
 

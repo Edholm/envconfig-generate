@@ -30,12 +30,13 @@ func main() {
 		var err error
 		providedFiles, err = list.AllGoFiles()
 		if err != nil {
-			logger.Fatalw("failed to list all Go files", "err", err)
+			logger.Error(err, "failed to list all Go files")
+			os.Exit(1)
 		}
 	}
 
 	if err := realMain(ctx, providedFiles); err != nil {
-		logger.Warnw("envconfig-generate failed", "err", err)
+		logger.Error(err, "envconfig-generate failed")
 	}
 }
 

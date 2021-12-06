@@ -88,7 +88,7 @@ func extractConfigOptions(ctx context.Context, strukt *ast.StructType) []ConfigO
 			continue
 		}
 		if err != nil {
-			logger.Warnw("failed to parse struct tag into ConfigOption", "err", err)
+			logger.Info("failed to parse struct tag into ConfigOption", "err", err)
 			continue
 		}
 
